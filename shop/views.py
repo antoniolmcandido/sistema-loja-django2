@@ -1,7 +1,20 @@
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
 from .models import Product, Category, Supplier
-from .forms import ProductForm, CategoryForm, SupplierForm
+from .forms import ProductForm, CategoryForm, SupplierForm, UserForm
+
+def user_create(request):
+    if request.method == "POST":
+        form = UserForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)  # Não salva ainda no banco
+            user.set_password(form.cleaned_data["password"])  # Faz o hash da senha
+            user.save()  # Agora salva com a senha hashada
+            return redirect("product_list")
+    else:
+        form = UserForm()
+
+    return render(request, 'user_form.html', {'form': form})
 
 # Create your views here.
 def product_list(request):
