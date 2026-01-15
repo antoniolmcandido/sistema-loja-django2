@@ -25,8 +25,8 @@
             Estoque: {{ produto.stock }}
           </small>
         </p>
-        <a href="#" class="btn btn-secondary">Editar</a>
-        <a href="#" class="btn btn-danger">Excluir</a>
+        <a href="{% url 'product_update' pk=produto.pk %}" class="btn btn-secondary">Editar</a>
+        <a href="{% url 'product_delete' pk=produto.pk %}" class="btn btn-danger">Excluir</a>
       </div>
     </div>
   </div>

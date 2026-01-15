@@ -7,4 +7,8 @@ urlpatterns = [
     path("create_category/", views.category_create, name="category_create"),
     path("create_supplier/", views.supplier_create, name="supplier_create"),
     path("create_user/", views.user_create, name="user_create"),
+    path("edit_product/<int:pk>/", views.product_update, name="product_update"),
+    path("delete_product/<int:pk>/", views.product_delete, name="product_delete"),
 ]
+
+handler404 = "shop.views.custom_page_not_found_view"

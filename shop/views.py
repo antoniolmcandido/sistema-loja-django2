@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
 from .models import Product, Category, Supplier
 from .forms import ProductForm, CategoryForm, SupplierForm, UserForm
@@ -40,6 +40,28 @@ def product_create(request):
     # Renderiza o template do formulário, passando o form como contexto
     return render(request, 'product_form.html', {'form': form})
 
+def product_update(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    
+    if request.method == 'POST':
+        form = ProductForm(request.POST, instance=product)
+        if form.is_valid():
+            form.save()
+            return redirect('product_list')
+    else:
+        form = ProductForm(instance=product)
+    
+    return render(request, 'product_form.html', {'form': form})
+
+def product_delete(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    
+    if request.method == 'POST':
+        product.delete()
+        return redirect('product_list')
+    
+    return render(request, 'product_confirm_delete.html', {'product': product})
+
 def category_create(request):
     if request.method == 'POST':
         form = CategoryForm(request.POST)
@@ -61,3 +83,7 @@ def supplier_create(request):
         form = SupplierForm()
 
     return render(request, 'supplier_form.html', {'form': form})
+
+def custom_page_not_found_view(request, exception):
+    # You can add custom logic here
+    return render(request, "404.html", {"additional_context": "some_data"}, status=404)
