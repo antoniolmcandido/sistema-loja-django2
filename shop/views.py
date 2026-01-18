@@ -84,6 +84,6 @@ def supplier_create(request):
 
     return render(request, 'supplier_form.html', {'form': form})
 
-def custom_page_not_found_view(request, exception):
+def custom_page_not_found_view(request):
     # You can add custom logic here
-    return render(request, "404.html", {"additional_context": "some_data"}, status=404)
+    return render(request, "404.html", status=404)
