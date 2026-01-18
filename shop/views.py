@@ -1,8 +1,31 @@
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
 from .models import Product, Category, Supplier
 from .forms import ProductForm, CategoryForm, SupplierForm, UserForm
 
+def is_staff_user(user):
+    return user.is_staff
+
+def user_login(request):
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect("product_list")
+        else:            
+            return render(request, "login.html", {"error_message": "Usuário ou senha inválidos."})
+    return render(request, "login.html")
+
+def user_logout(request):
+    logout(request)
+    return redirect("product_list")
+
+@login_required(login_url='user_login')
+@user_passes_test(is_staff_user)
 def user_create(request):
     if request.method == "POST":
         form = UserForm(request.POST)
@@ -26,6 +49,8 @@ def product_list(request):
 
     return render(request, 'product_list.html', {'produtos': produtos})
 
+@login_required(login_url="user_login")
+@user_passes_test(is_staff_user)
 def product_create(request):
     if request.method == 'POST':
         # Se o método for POST, o formulário foi enviado
@@ -40,6 +65,8 @@ def product_create(request):
     # Renderiza o template do formulário, passando o form como contexto
     return render(request, 'product_form.html', {'form': form})
 
+@login_required(login_url="user_login")
+@user_passes_test(is_staff_user)
 def product_update(request, pk):
     product = get_object_or_404(Product, pk=pk)
     
@@ -53,6 +80,8 @@ def product_update(request, pk):
     
     return render(request, 'product_form.html', {'form': form})
 
+@login_required(login_url="user_login")
+@user_passes_test(is_staff_user)
 def product_delete(request, pk):
     product = get_object_or_404(Product, pk=pk)
     
@@ -62,6 +91,8 @@ def product_delete(request, pk):
     
     return render(request, 'product_confirm_delete.html', {'product': product})
 
+@login_required(login_url="user_login")
+@user_passes_test(is_staff_user)
 def category_create(request):
     if request.method == 'POST':
         form = CategoryForm(request.POST)
@@ -73,6 +104,8 @@ def category_create(request):
 
     return render(request, 'category_form.html', {'form': form})
 
+@login_required(login_url="user_login")
+@user_passes_test(is_staff_user)
 def supplier_create(request):
     if request.method == 'POST':
         form = SupplierForm(request.POST)
