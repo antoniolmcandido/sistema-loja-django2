@@ -13,8 +13,8 @@ class SupplierSerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     # Passar todos os dados da categoria e fornecedor relacionados
-    category = CategorySerializer(read_only=True)
-    supplier = SupplierSerializer(read_only=True)
+    # category = CategorySerializer(read_only=True)
+    # supplier = SupplierSerializer(read_only=True)
 
     # Adicionar campos somente leitura para os nomes da categoria e fornecedor
     # category_name = serializers.ReadOnlyField(source='category.name')

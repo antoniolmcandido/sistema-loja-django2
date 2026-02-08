@@ -14,7 +14,7 @@ schema_view = get_schema_view(
         description="API para gestão de produtos, categorias e fornecedores.",
         terms_of_service="https://www.google.com/policies/terms/",
         contact=openapi.Contact(email="contato@loja.local"),
-        license=openapi.License(name="BSD License"),
+        license=openapi.License(name="MTI License"),
     ),
     public=True,
     permission_classes=(permissions.AllowAny,),
@@ -27,6 +27,7 @@ router.register(r"products", ProductViewSet)
 
 urlpatterns = [
     path("", include(router.urls)),
+    
     # Rotas do Swagger
     path(
         "swagger/",
